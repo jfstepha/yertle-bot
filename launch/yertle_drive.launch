@@ -44,6 +44,7 @@
     <rosparam param="base_width">0.35</rosparam>
   </node>
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+  
   <node name="yertle_dash" pkg="yertle" type="yertle_dash.py" />
   
 </launch>
