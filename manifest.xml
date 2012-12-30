@@ -1,0 +1,17 @@
+<package>
+  <description brief="yertle">
+
+     yertle
+
+  </description>
+  <author>Jon Stephan</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/yertle</url>
+  <depend package="differential_drive"/>
+  <depend package="rosserial_arduino"/>
+  <depend package="openni"/>
+
+</package>
+
+

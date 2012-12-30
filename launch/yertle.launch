@@ -1,0 +1,5 @@
+<launch>
+    <include file="$(find yertle)/launch/yertle_drive.launch" />
+    <include file="$(find yertle)/launch/kinect_to_laser.launch"/>
+    <node pkg="rviz" type="rviz" name="rviz"/>
+</launch>
