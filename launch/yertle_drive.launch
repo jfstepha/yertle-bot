@@ -1,6 +1,6 @@
 <launch>
   <!-- change this next line to include the launch file for your robot's hardware drivers here -->
-  <include file="$(find knex_ros)/launch/knex_arduino_ser.launch" />  
+  <node pkg="rosserial_python" type="serial_node.py" args="/dev/ttyACM0" name="serial_node" respawn="true"/>
   <param name="robot_description" textfile="$(find yertle)/yertle.urdf" /> 
 
 <!--  original value 15164 --> 
