@@ -64,20 +64,6 @@ class MainWindow(QtGui.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         
-        rospy.Subscriber("lwheel", Int16, self.lwheelCallback)
-        rospy.Subscriber("lwheel_vtarget", Float32, self.lwheelVtargetCallback)
-        rospy.Subscriber("lwheel_vel", Float32, self.lwheelVelCallback)
-        rospy.Subscriber("lmotor_cmd", Float32, self.lmotorCallback)
-        
-        rospy.Subscriber("rwheel", Int16, self.rwheelCallback)
-        rospy.Subscriber("rwheel_vtarget", Float32, self.rwheelVtargetCallback)
-        rospy.Subscriber("rwheel_vel", Float32, self.lwheelVelCallback)
-        rospy.Subscriber("rmotor_cmd", Float32, self.rmotorCallback)
-
-        rospy.Subscriber("battery", Int16, self.batCallback)
-        
-        rospy.Subscriber("arduino_debug", String, self.arduinoDebugCallback)
-        
         self.c = Communicate()
         self.c.ltarget.connect( self.ui.pbLTarget.setValue )
         self.c.rtarget.connect( self.ui.pbRTarget.setValue )
@@ -90,7 +76,57 @@ class MainWindow(QtGui.QMainWindow):
         self.c.lwheel.connect( self.ui.tbLWheel.setText )
         self.c.rwheel.connect( self.ui.tbRWheel.setText )
         self.c.debugmsg.connect( self.ui.tbDebug.setText )
+ 
+        self.timer = QtCore.QBasicTimer()
+        self.timer.rate = 10       
+        self.timer.start(self.timer_rate, self)
+        self.ticks_since_debug = 1000
+        self.ticks_since_ltarg = 1000
+        self.ticks_since_rtarg = 1000
+        self.ticks_since_lvel = 1000
+        self.ticks_since_rvel = 1000
         
+        rospy.Subscriber("lwheel", Int16, self.lwheelCallback)
+        rospy.Subscriber("lwheel_vtarget", Float32, self.lwheelVtargetCallback)
+        rospy.Subscriber("lwheel_vel", Float32, self.lwheelVelCallback)
+        rospy.Subscriber("lmotor_cmd", Float32, self.lmotorCallback)
+        
+        rospy.Subscriber("rwheel", Int16, self.rwheelCallback)
+        rospy.Subscriber("rwheel_vtarget", Float32, self.rwheelVtargetCallback)
+        rospy.Subscriber("rwheel_vel", Float32, self.rwheelVelCallback)
+        rospy.Subscriber("rmotor_cmd", Float32, self.rmotorCallback)
+
+        rospy.Subscriber("battery", Int16, self.batCallback)
+        self.ui.pb12V.setMaximum(1000)  # 750 = ~12.8V
+        
+        rospy.Subscriber("arduino_debug", String, self.arduinoDebugCallback)
+        
+        
+    #####################################################################    
+    def timerEvent(self, event):
+    #####################################################################    
+        self.ticks_since_debug += 1
+        if self.ticks_since_debug > 150:
+            self.ui.tbDebug.setStyleSheet("QLineEdit { background-color: Red; } ")
+        else: 
+            self.ui.tbDebug.setStyleSheet("QLineEdit { background-color: LightGreen; } ")
+       
+        self.ticks_since_ltarg += 1     
+        if self.ticks_since_ltarg > 10:
+            self.c.ltarget.emit(0)
+            
+        self.ticks_since_rtarg += 1
+        if self.ticks_since_rtarg > 10:
+            self.c.rtarget.emit(0) 
+            
+        self.ticks_since_lvel += 1
+        if self.ticks_since_lvel > 10:
+            self.c.lvel.emit(0)
+            
+        self.ticks_since_rvel += 1
+        if self.ticks_since_rvel > 10:
+            self.c.rvel.emit(0)
+                                        
         
     #############################################################################
     def lwheelCallback(self, msg):
@@ -105,21 +141,25 @@ class MainWindow(QtGui.QMainWindow):
     #############################################################################
     def lwheelVtargetCallback(self, msg):
     #############################################################################
+        self.ticks_since_ltarg = 0
         self.c.ltarget.emit( int( msg.data * 1000 ) ) 
         
     #############################################################################
     def rwheelVtargetCallback(self, msg):
     #############################################################################
+        self.ticks_since_rtarg = 0
         self.c.rtarget.emit( int( msg.data * 1000 ) )    
         
     #############################################################################
     def rwheelVelCallback(self, msg):
     #############################################################################
+        self.ticks_since_rvel = 0
         self.c.rvel.emit( int( msg.data * 1000 ) )    
         
     #############################################################################
     def lwheelVelCallback(self, msg):
     #############################################################################
+        self.ticks_since_lvel = 0
         self.c.lvel.emit( int( msg.data * 1000 ) )    
         
     #############################################################################
@@ -141,6 +181,7 @@ class MainWindow(QtGui.QMainWindow):
     def arduinoDebugCallback(self, msg):
     #############################################################################
         self.c.debugmsg.emit( msg.data )
+        self.ticks_since_debug = 0
         
 ##########################################################################
 ##########################################################################

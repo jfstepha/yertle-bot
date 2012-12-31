@@ -16,13 +16,13 @@
       <remap from="motor_cmd" to="lmotor_cmd"/>
       <remap from="wheel_vtarget" to="lwheel_vtarget"/>
       <remap from="wheel_vel" to="lwheel_vel"/>
-      <rosparam param="Kp">400</rosparam>
-      <rosparam param="Ki">1500</rosparam>
+      <rosparam param="Kp">250</rosparam>
+      <rosparam param="Ki">4000</rosparam>
       <rosparam param="Kd">0</rosparam>
       <rosparam param="out_min">-255</rosparam>
       <rosparam param="out_max">255</rosparam>
       <rosparam param="rate">30</rosparam>
-      <rosparam param="timeout_ticks">4</rosparam>
+      <rosparam param="timeout_ticks">5</rosparam>
       <rosparam param="rolling_pts">5</rosparam>
   </node> 
   <node pkg="differential_drive" type="pid_velocity.py" name="rpid_velocity" output="screen">
@@ -30,20 +30,27 @@
       <remap from="motor_cmd" to="rmotor_cmd"/>
       <remap from="wheel_vtarget" to="rwheel_vtarget"/>
       <remap from="wheel_vel" to="rwheel_vel"/>
-      <rosparam param="Kp">400</rosparam>
-      <rosparam param="Ki">1500</rosparam>
+      <rosparam param="Kp">250</rosparam>
+      <rosparam param="Ki">4000</rosparam>
       <rosparam param="Kd">0</rosparam>
       <rosparam param="out_min">-255</rosparam>
       <rosparam param="out_max">255</rosparam>
       <rosparam param="rate">30</rosparam>
-      <rosparam param="timeout_ticks">4</rosparam>
+      <rosparam param="timeout_ticks">5</rosparam>
       <rosparam param="rolling_pts">5</rosparam>
   </node> 
-  <node pkg="differential_drive" type="virtual_joystick.py" name="virtual_joystick" output="screen"/> 
+  <node pkg="differential_drive" type="virtual_joystick.py" name="virtual_joystick" output="screen"> 
+      <rosparam param="~x_min">-0.4</rosparam>
+      <rosparam param="~x_max">0.4</rosparam>
+      <rosparam param="~r_min">-2.0</rosparam>
+      <rosparam param="~r_max">2.0</rosparam>
+  </node>
   <node pkg="differential_drive" type="twist_to_motors.py" name="twist_to_motors" output="screen">
     <rosparam param="base_width">0.35</rosparam>
   </node>
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" >
+  <param name="publish_frequency" value="100" />
+  </node>
   
   <node name="yertle_dash" pkg="yertle" type="yertle_dash.py" />
   
