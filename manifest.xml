@@ -10,7 +10,7 @@
   <url>http://ros.org/wiki/yertle</url>
   <depend package="differential_drive"/>
   <depend package="rosserial_arduino"/>
-  <depend package="openni"/>
+  <depend package="openni_launch"/>
 
 </package>
 

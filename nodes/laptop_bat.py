@@ -54,7 +54,7 @@ class LaptopBat():
         p = s.split(",")[1]
         bat = int(p[1:-1])
         
-        rospy.loginfo("-D- percent remaining: %d" % (bat))
+        rospy.logdebug("-D- percent remaining: %d" % (bat))
         
         self.bat_pub.publish( bat )
             

@@ -97,7 +97,10 @@ class MainWindow(QtGui.QMainWindow):
         rospy.Subscriber("rmotor_cmd", Float32, self.rmotorCallback)
 
         rospy.Subscriber("battery", Int16, self.batCallback)
-        self.ui.pb12V.setMaximum(1000)  # 750 = ~12.8V
+        # 720 is pretty dead, but when motors run, it droops to <400
+        self.ui.pb12V.setMaximum(770)  # 750 = ~12.8V
+        self.ui.pb12V.setMinimum(730)
+        
         
         rospy.Subscriber("arduino_debug", String, self.arduinoDebugCallback)
         

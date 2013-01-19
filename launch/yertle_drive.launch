@@ -1,17 +1,20 @@
 <launch>
+  <machine name="robot" address="tate-mobl" env-loader="/home/jfstepha/ros_workspace/env.sh" user="jfstepha" timeout="240"/>
+  <!-- see http://www.ros.org/wiki/roslaunch/XML/machine -->
+
   <!-- change this next line to include the launch file for your robot's hardware drivers here -->
-  <node pkg="rosserial_python" type="serial_node.py" args="/dev/ttyACM0" name="serial_node" respawn="true"/>
+  <node machine="robot" pkg="rosserial_python" type="serial_node.py" args="/dev/ttyACM0" name="serial_node" respawn="true"/>
   <param name="robot_description" textfile="$(find yertle)/yertle.urdf" /> 
 
 <!--  original value 15164 --> 
   <rosparam param="ticks_meter">15500</rosparam>
   
-   <node pkg="differential_drive" type="diff_tf.py" name="diff_tf">
+   <node machine="robot" pkg="differential_drive" type="diff_tf.py" name="diff_tf">
      <rosparam param="rate">8.0</rosparam>
      <rosparam param="base_width">0.36</rosparam>
   </node>
 
-  <node pkg="differential_drive" type="pid_velocity.py" name="lpid_velocity" output="screen">
+  <node machine="robot" pkg="differential_drive" type="pid_velocity.py" name="lpid_velocity" output="screen">
       <remap from="wheel" to="lwheel"/>
       <remap from="motor_cmd" to="lmotor_cmd"/>
       <remap from="wheel_vtarget" to="lwheel_vtarget"/>
@@ -25,7 +28,7 @@
       <rosparam param="timeout_ticks">5</rosparam>
       <rosparam param="rolling_pts">5</rosparam>
   </node> 
-  <node pkg="differential_drive" type="pid_velocity.py" name="rpid_velocity" output="screen">
+  <node machine="robot" pkg="differential_drive" type="pid_velocity.py" name="rpid_velocity" output="screen">
       <remap from="wheel" to="rwheel"/>
       <remap from="motor_cmd" to="rmotor_cmd"/>
       <remap from="wheel_vtarget" to="rwheel_vtarget"/>
@@ -45,10 +48,10 @@
       <rosparam param="~r_min">-2.0</rosparam>
       <rosparam param="~r_max">2.0</rosparam>
   </node>
-  <node pkg="differential_drive" type="twist_to_motors.py" name="twist_to_motors" output="screen">
+  <node machine="robot" pkg="differential_drive" type="twist_to_motors.py" name="twist_to_motors" output="screen">
     <rosparam param="base_width">0.35</rosparam>
   </node>
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" >
+  <node machine="robot" name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" >
   <param name="publish_frequency" value="100" />
   </node>
   
