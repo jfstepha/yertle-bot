@@ -4,14 +4,44 @@ roslib.load_manifest('yertle')
 
 import os
 import rospy
+from geometry_msgs.msg import Twist
+from std_msgs.msg import Int16
+from std_msgs.msg import Float32
+from std_msgs.msg import String
 
 from qt_gui.plugin import Plugin
 from python_qt_binding import loadUi
 from python_qt_binding.QtGui import QWidget
+from PySide import QtGui, QtCore
+from python_qt_binding.QtCore import QTimer
 
+##########################################################################
+##########################################################################
+class Communicate(QtCore.QObject):
+##########################################################################
+##########################################################################
+    ltarget = QtCore.Signal(int)
+    rtarget = QtCore.Signal(int)
+    lvel = QtCore.Signal(int)
+    rvel = QtCore.Signal(int)
+    lmotor = QtCore.Signal(int)
+    rmotor = QtCore.Signal(int)
+    lapbat = QtCore.Signal(int)
+    lapwifi = QtCore.Signal(int)
+    bat12v = QtCore.Signal(int)
+    debugmsg = QtCore.Signal(str)
+    lwheel = QtCore.Signal(str)
+    rwheel = QtCore.Signal(str)
+
+##########################################################################
+##########################################################################
 class MyPlugin(Plugin):
+##########################################################################
+##########################################################################
 
+    #####################################################################    
     def __init__(self, context):
+    #####################################################################    
         super(MyPlugin, self).__init__(context)
         # Give QObjects reasonable names
         self.setObjectName('MyPlugin')
@@ -29,16 +59,158 @@ class MyPlugin(Plugin):
             print 'unknowns: ', unknowns
 
         # Create QWidget
-        self._widget = QWidget()
+        self.ui = QWidget()
         # Get path to UI file which is a sibling of this file
         # in this example the .ui and .py file are in the same folder
         ui_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'yertle_dash.ui')
         # Extend the widget with all attributes and children from UI file
-        loadUi(ui_file, self._widget)
+        loadUi(ui_file, self.ui)
         # Give QObjects reasonable names
-        self._widget.setObjectName('MyPluginUi')
+        self.ui.setObjectName('MyPluginUi')
         # Add widget to the user interface
-        context.add_widget(self._widget)
+        context.add_widget(self.ui)
+        
+        self.timer_rate = rospy.get_param('~publish_rate', 50)
+        self.c = Communicate()
+        
+        self.c.ltarget.connect( self.ui.pbLTarget.setValue )
+        self.c.rtarget.connect( self.ui.pbRTarget.setValue )
+        self.c.lvel.connect( self.ui.pbLVel.setValue )
+        self.c.rvel.connect( self.ui.pbRVel.setValue )
+        self.c.lmotor.connect( self.ui.pbLMotor.setValue )
+        self.c.rmotor.connect( self.ui.pbRMotor.setValue )
+        self.c.bat12v.connect( self.ui.pb12V.setValue )
+        self.c.lapbat.connect( self.ui.pbLapBat.setValue )
+        self.c.lapwifi.connect( self.ui.pbWifi.setValue )
+        self.c.lwheel.connect( self.ui.tbLWheel.setText )
+        self.c.rwheel.connect( self.ui.tbRWheel.setText )
+        self.c.debugmsg.connect( self.ui.tbDebug.setText )
+ 
+        self.timer = QTimer()
+        self.timer.singleShot = False
+        self.timer.timeout.connect(self.timerEvent)
+        self.timer.start(20) # in ms
+        
+        self.ticks_since_debug = 1000
+        self.ticks_since_ltarg = 1000
+        self.ticks_since_rtarg = 1000
+        self.ticks_since_lvel = 1000
+        self.ticks_since_rvel = 1000
+        
+        rospy.Subscriber("lwheel", Int16, self.lwheelCallback)
+        rospy.Subscriber("lwheel_vtarget", Float32, self.lwheelVtargetCallback)
+        rospy.Subscriber("lwheel_vel", Float32, self.lwheelVelCallback)
+        rospy.Subscriber("lmotor_cmd", Float32, self.lmotorCallback)
+        
+        rospy.Subscriber("rwheel", Int16, self.rwheelCallback)
+        rospy.Subscriber("rwheel_vtarget", Float32, self.rwheelVtargetCallback)
+        rospy.Subscriber("rwheel_vel", Float32, self.rwheelVelCallback)
+        rospy.Subscriber("rmotor_cmd", Float32, self.rmotorCallback)
+
+        rospy.Subscriber("battery", Int16, self.batCallback)
+        # 720 is pretty dead, but when motors run, it droops to <400
+        self.ui.pb12V.setMaximum(770)  # 750 = ~12.8V
+        self.ui.pb12V.setMinimum(600)
+        
+        rospy.Subscriber("laptop_bat", Int16, self.lapBatCallback)
+        rospy.Subscriber("laptop_wifi", Int16, self.lapWifiCallback)
+        
+        
+        rospy.Subscriber("arduino_debug", String, self.arduinoDebugCallback)
+        
+        
+    #####################################################################    
+    def timerEvent(self):
+    #####################################################################    
+        self.ticks_since_debug += 1
+        if self.ticks_since_debug > 150:
+            self.ui.tbDebug.setStyleSheet("QLineEdit { background-color: Red; } ")
+        else: 
+            self.ui.tbDebug.setStyleSheet("QLineEdit { background-color: LightGreen; } ")
+       
+        self.ticks_since_ltarg += 1     
+        if self.ticks_since_ltarg > 10:
+            self.c.ltarget.emit(0)
+            
+        self.ticks_since_rtarg += 1
+        if self.ticks_since_rtarg > 10:
+            self.c.rtarget.emit(0) 
+            
+        self.ticks_since_lvel += 1
+        if self.ticks_since_lvel > 10:
+            self.c.lvel.emit(0)
+            
+        self.ticks_since_rvel += 1
+        if self.ticks_since_rvel > 10:
+            self.c.rvel.emit(0)
+                                        
+        
+    #############################################################################
+    def lwheelCallback(self, msg):
+    #############################################################################
+        self.c.lwheel.emit( str( msg.data ) ) 
+        
+    #############################################################################
+    def rwheelCallback(self, msg):
+    #############################################################################
+        self.c.rwheel.emit( str( msg.data ) )
+        
+    #############################################################################
+    def lwheelVtargetCallback(self, msg):
+    #############################################################################
+        self.ticks_since_ltarg = 0
+        self.c.ltarget.emit( int( msg.data * 1000 ) ) 
+        
+    #############################################################################
+    def rwheelVtargetCallback(self, msg):
+    #############################################################################
+        self.ticks_since_rtarg = 0
+        self.c.rtarget.emit( int( msg.data * 1000 ) )    
+        
+    #############################################################################
+    def rwheelVelCallback(self, msg):
+    #############################################################################
+        self.ticks_since_rvel = 0
+        self.c.rvel.emit( int( msg.data * 1000 ) )    
+        
+    #############################################################################
+    def lwheelVelCallback(self, msg):
+    #############################################################################
+        self.ticks_since_lvel = 0
+        self.c.lvel.emit( int( msg.data * 1000 ) )    
+        
+    #############################################################################
+    def lmotorCallback(self, msg):
+    #############################################################################
+        self.c.lmotor.emit( int( msg.data  ) )    
+        
+    #############################################################################
+    def rmotorCallback(self, msg):
+    #############################################################################
+        self.c.rmotor.emit( int( msg.data  ) )    
+        
+    #############################################################################
+    def batCallback(self, msg):
+    #############################################################################
+        self.c.bat12v.emit( int( msg.data  ) )    
+        
+    #############################################################################
+    def lapBatCallback(self, msg):
+    #############################################################################
+        self.c.lapbat.emit( int( msg.data  ) )    
+        
+    #############################################################################
+    def lapWifiCallback(self, msg):
+    #############################################################################
+        self.c.lapwifi.emit( int( msg.data  ) )    
+        
+    #############################################################################
+    def arduinoDebugCallback(self, msg):
+    #############################################################################
+        self.c.debugmsg.emit( msg.data )
+        self.ticks_since_debug = 0
+        
+        
 
     def shutdown_plugin(self):
         # TODO unregister all publishers here
