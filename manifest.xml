@@ -11,6 +11,9 @@
   <depend package="differential_drive"/>
   <depend package="rosserial_arduino"/>
   <depend package="openni_launch"/>
+   <export>
+    <rqt_gui plugin="${prefix}/plugin.xml"/>
+  </export> 
 
 </package>
 
