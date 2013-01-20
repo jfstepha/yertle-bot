@@ -57,5 +57,8 @@
   
   <node name="yertle_dash" pkg="yertle" type="yertle_dash.py" />
   
+  <node machine="robot" name="laptop_bat" pkg="yertle" type="laptop_bat.py" />
+  <node machine="robot" name="laptop_wifi" pkg="yertle" type="laptop_wifi.py" />
+  
 </launch>
 

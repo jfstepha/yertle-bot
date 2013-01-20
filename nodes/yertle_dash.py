@@ -43,7 +43,8 @@ class Communicate(QtCore.QObject):
     rvel = QtCore.Signal(int)
     lmotor = QtCore.Signal(int)
     rmotor = QtCore.Signal(int)
-    bat14v = QtCore.Signal(int)
+    lapbat = QtCore.Signal(int)
+    lapwifi = QtCore.Signal(int)
     bat12v = QtCore.Signal(int)
     debugmsg = QtCore.Signal(str)
     lwheel = QtCore.Signal(str)
@@ -72,7 +73,8 @@ class MainWindow(QtGui.QMainWindow):
         self.c.lmotor.connect( self.ui.pbLMotor.setValue )
         self.c.rmotor.connect( self.ui.pbRMotor.setValue )
         self.c.bat12v.connect( self.ui.pb12V.setValue )
-        self.c.bat14v.connect( self.ui.pb14V.setValue )
+        self.c.lapbat.connect( self.ui.pbLapBat.setValue )
+        self.c.lapwifi.connect( self.ui.pbWifi.setValue )
         self.c.lwheel.connect( self.ui.tbLWheel.setText )
         self.c.rwheel.connect( self.ui.tbRWheel.setText )
         self.c.debugmsg.connect( self.ui.tbDebug.setText )
@@ -99,7 +101,10 @@ class MainWindow(QtGui.QMainWindow):
         rospy.Subscriber("battery", Int16, self.batCallback)
         # 720 is pretty dead, but when motors run, it droops to <400
         self.ui.pb12V.setMaximum(770)  # 750 = ~12.8V
-        self.ui.pb12V.setMinimum(730)
+        self.ui.pb12V.setMinimum(600)
+        
+        rospy.Subscriber("laptop_bat", Int16, self.lapBatCallback)
+        rospy.Subscriber("laptop_wifi", Int16, self.lapWifiCallback)
         
         
         rospy.Subscriber("arduino_debug", String, self.arduinoDebugCallback)
@@ -179,6 +184,16 @@ class MainWindow(QtGui.QMainWindow):
     def batCallback(self, msg):
     #############################################################################
         self.c.bat12v.emit( int( msg.data  ) )    
+        
+    #############################################################################
+    def lapBatCallback(self, msg):
+    #############################################################################
+        self.c.lapbat.emit( int( msg.data  ) )    
+        
+    #############################################################################
+    def lapWifiCallback(self, msg):
+    #############################################################################
+        self.c.lapwifi.emit( int( msg.data  ) )    
         
     #############################################################################
     def arduinoDebugCallback(self, msg):

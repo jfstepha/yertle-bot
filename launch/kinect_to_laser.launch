@@ -1,10 +1,7 @@
 <launch>
   <!-- kinect and frame ids -->
   <machine name="robot" address="tate-mobl" env-loader="/home/jfstepha/ros_workspace/env.sh" user="jfstepha" timeout="240"/>
-<!--    <include file="$(find yertle)/launch/openni.launch"/> -->
-
-  <!-- openni_manager -->
-  <node machine="robot" pkg="nodelet" type="nodelet" name="openni_manager" output="screen" respawn="true" args="manager"/>
+  <include file="$(find yertle)/launch/openni.launch"/> 
 
   <!-- throttling -->
 <!--  <node pkg="nodelet" type="nodelet" name="pointcloud_throttle" args="load pointcloud_to_laserscan/CloudThrottle openni_manager">
