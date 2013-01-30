@@ -22,7 +22,7 @@ class MainVirtJoy(QWidget):
     def __init__(self):
     #####################################################################    
         super(MainVirtJoy, self).__init__()
-        self.timer_rate = rospy.get_param('~publish_rate', 50)
+        self.timer_rate = rospy.get_param('~publish_rate', 150)
         self.pub_twist = rospy.Publisher('twist', Twist)
         
         self.x_min = rospy.get_param("~x_min", -0.20)
@@ -45,6 +45,9 @@ class MainVirtJoy(QWidget):
     def mouseReleaseEvent(self, event):
     #####################################################################    
         rospy.logdebug('-D- virtual_joystick mouse released')
+        self.x = 0.5
+        self.y = 0.5
+        self.pubTwist()
         self.timer.stop()
         
     #####################################################################    

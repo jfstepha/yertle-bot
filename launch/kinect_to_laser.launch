@@ -1,18 +1,12 @@
 <launch>
   <!-- kinect and frame ids -->
-  <machine name="robot" address="tate-mobl" env-loader="/home/jfstepha/ros_workspace/env.sh" user="jfstepha" timeout="240"/>
+  <machine name="robot" address="$(env ROBOT)" env-loader="/home/jfstepha/ros_workspace/env.sh" user="jfstepha" timeout="240"/>
   <include file="$(find yertle)/launch/openni.launch"/> 
 
   <!-- throttling -->
-<!--  <node pkg="nodelet" type="nodelet" name="pointcloud_throttle" args="load pointcloud_to_laserscan/CloudThrottle openni_manager">
-    <param name="max_rate" value="2"/>
-    <remap from="cloud_in" to="/camera/depth/points"/>
-    <remap from="cloud_out" to="cloud_throttled"/>
-  </node>
--->
 
   <!-- fake laser -->
-  <node machine="robot" pkg="nodelet" type="nodelet" name="kinect_laser" args="load depthimage_to_laserscan/DepthImageToLaserScanNodelet openni_manager">
+  <node machine="robot" pkg="nodelet" type="nodelet" name="kinect_laser" args="load depthimage_to_laserscan/DepthImageToLaserScanNodelet camera_nodelet_manager">
     <param name="output_frame_id" value="/scanner"/>
     <remap from="image" to="/camera/depth/image_raw"/>
   </node>
@@ -20,9 +14,9 @@
   <node machine="robot" pkg="gmapping" type="slam_gmapping" name="gmapping" output="screen">
     <!--   <remap from="scan" to="/laser"/> -->
     <rosparam param="odom_frame">odom</rosparam> 
-    <rosparam param="map_update_interval">0.1</rosparam>
-    <rosparam param="linearUpdate">0.001</rosparam>     <!-- Process a scan each time the robot translates this far -->
-    <rosparam param="angularUpdate">0.001</rosparam> <!-- Process a scan each time the robot rotates this far -->
+    <rosparam param="map_update_interval">5</rosparam>
+    <rosparam param="linearUpdate">1.0</rosparam>     <!-- Process a scan each time the robot translates this far -->
+    <rosparam param="angularUpdate">0.5</rosparam> <!-- Process a scan each time the robot rotates this far -->
     <rosparam param="kernelSize">1</rosparam>    <!-- The kernel in which to look for a correspondence -->
     <rosparam param="lstep">0.05</rosparam>        <!-- The optimization step in translation -->
     <rosparam param="astep">0.05</rosparam>        <!-- The optimization step in rotation -->
@@ -41,6 +35,5 @@
     <rosparam param="srt">0.2</rosparam>
     <rosparam param="str">0.1</rosparam>
     <rosparam param="stt">0.2</rosparam>
-    <rosparam param="temporalUpdate">30</rosparam>
   </node>
 </launch>

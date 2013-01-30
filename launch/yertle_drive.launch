@@ -1,5 +1,5 @@
 <launch>
-  <machine name="robot" address="tate-mobl" env-loader="/home/jfstepha/ros_workspace/env.sh" user="jfstepha" timeout="240"/>
+  <machine name="robot" address="$(env ROBOT)" env-loader="/home/jfstepha/ros_workspace/env.sh" user="jfstepha" timeout="240"/>
   <!-- see http://www.ros.org/wiki/roslaunch/XML/machine -->
 
   <!-- change this next line to include the launch file for your robot's hardware drivers here -->
@@ -11,7 +11,7 @@
   
    <node machine="robot" pkg="differential_drive" type="diff_tf.py" name="diff_tf">
      <rosparam param="rate">8.0</rosparam>
-     <rosparam param="base_width">0.36</rosparam>
+     <rosparam param="base_width">0.39</rosparam> <!-- 0.38 was measured value -->
   </node>
 
   <node machine="robot" pkg="differential_drive" type="pid_velocity.py" name="lpid_velocity" output="screen">
@@ -19,13 +19,13 @@
       <remap from="motor_cmd" to="lmotor_cmd"/>
       <remap from="wheel_vtarget" to="lwheel_vtarget"/>
       <remap from="wheel_vel" to="lwheel_vel"/>
-      <rosparam param="Kp">250</rosparam>
-      <rosparam param="Ki">4000</rosparam>
+      <rosparam param="Kp">300</rosparam>
+      <rosparam param="Ki">3000</rosparam>
       <rosparam param="Kd">0</rosparam>
       <rosparam param="out_min">-255</rosparam>
       <rosparam param="out_max">255</rosparam>
-      <rosparam param="rate">30</rosparam>
-      <rosparam param="timeout_ticks">5</rosparam>
+      <rosparam param="rate">50</rosparam>
+      <rosparam param="timeout_ticks">20</rosparam>
       <rosparam param="rolling_pts">5</rosparam>
   </node> 
   <node machine="robot" pkg="differential_drive" type="pid_velocity.py" name="rpid_velocity" output="screen">
@@ -33,26 +33,28 @@
       <remap from="motor_cmd" to="rmotor_cmd"/>
       <remap from="wheel_vtarget" to="rwheel_vtarget"/>
       <remap from="wheel_vel" to="rwheel_vel"/>
-      <rosparam param="Kp">250</rosparam>
-      <rosparam param="Ki">4000</rosparam>
+      <rosparam param="Kp">300</rosparam>
+      <rosparam param="Ki">3000</rosparam>
       <rosparam param="Kd">0</rosparam>
       <rosparam param="out_min">-255</rosparam>
       <rosparam param="out_max">255</rosparam>
-      <rosparam param="rate">30</rosparam>
-      <rosparam param="timeout_ticks">5</rosparam>
+      <rosparam param="rate">50</rosparam>
+      <rosparam param="timeout_ticks">20</rosparam>
       <rosparam param="rolling_pts">5</rosparam>
   </node> 
-  <node pkg="differential_drive" type="virtual_joystick.py" name="virtual_joystick" output="screen"> 
+<!--    <node pkg="differential_drive" type="virtual_joystick.py" name="virtual_joystick" output="screen"> 
       <rosparam param="~x_min">-0.4</rosparam>
       <rosparam param="~x_max">0.4</rosparam>
       <rosparam param="~r_min">-2.0</rosparam>
       <rosparam param="~r_max">2.0</rosparam>
   </node>
+  -->
+  
   <node machine="robot" pkg="differential_drive" type="twist_to_motors.py" name="twist_to_motors" output="screen">
     <rosparam param="base_width">0.35</rosparam>
   </node>
   <node machine="robot" name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" >
-  <param name="publish_frequency" value="100" />
+  <param name="publish_frequency" value="5" />
   </node>
   
 <!--   <node name="yertle_dash" pkg="yertle" type="yertle_dash.py" /> -->

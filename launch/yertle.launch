@@ -1,5 +1,9 @@
 <launch>
     <include file="$(find yertle)/launch/yertle_drive.launch" />
     <include file="$(find yertle)/launch/kinect_to_laser.launch"/>
+    <!-- <include file="$(find yertle)/launch/telepres.launch"/> -->
+    <node name="image_robot" pkg="image_view" type="image_view">
+            <remap from="image" to="/camera/rgb/image_color"/>
+        </node>
     <node pkg="rviz" type="rviz" name="rviz"/>
 </launch>
