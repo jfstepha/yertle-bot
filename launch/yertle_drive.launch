@@ -10,7 +10,7 @@
   <rosparam param="ticks_meter">15500</rosparam>
   
    <node machine="robot" pkg="differential_drive" type="diff_tf.py" name="diff_tf">
-     <rosparam param="rate">8.0</rosparam>
+     <rosparam param="rate">100.0</rosparam>
      <rosparam param="base_width">0.39</rosparam> <!-- 0.38 was measured value -->
   </node>
 
@@ -54,13 +54,15 @@
     <rosparam param="base_width">0.35</rosparam>
   </node>
   <node machine="robot" name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" >
-  <param name="publish_frequency" value="5" />
+  <param name="publish_frequency" value="50" />
   </node>
   
 <!--   <node name="yertle_dash" pkg="yertle" type="yertle_dash.py" /> -->
   
   <node machine="robot" name="laptop_bat" pkg="yertle" type="laptop_bat.py" />
-  <node machine="robot" name="laptop_wifi" pkg="yertle" type="laptop_wifi.py" />
+  <node machine="robot" name="laptop_wifi" pkg="yertle" type="laptop_wifi.py" >
+     <param name="range" value="70" />
+  </node>
   
 </launch>
 

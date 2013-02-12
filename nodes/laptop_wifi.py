@@ -16,8 +16,9 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """ 
-  Monitors laptop battery.  Requires the acpi command.  get it with:
-  "sudo apt-get install acpi"
+  Monitors laptop wifi connection
+  You may need to set permissions to iwconfig:
+  sudo chmod u+s /sbin/iwconfig
    
 """
    
