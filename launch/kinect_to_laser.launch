@@ -16,7 +16,7 @@
     <param name="odom_frame" value="odom" />
     <param name="map_update_interval" value="5" />
     <param name="linearUpdate" value="1.0" />     <!-- Process a scan each time the robot translates this far -->
-    <param name="angularUpdate" value="0.5" /> <!-- Process a scan each time the robot rotates this far -->
+    <param name="angularUpdate" value="0.1" /> <!-- Process a scan each time the robot rotates this far -->
     <param name="kernelSize" value="1" />    <!-- The kernel in which to look for a correspondence -->
     <param name="lstep" value="0.05" />        <!-- The optimization step in translation -->
     <param name="astep" value="0.05" />        <!-- The optimization step in rotation -->

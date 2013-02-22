@@ -3,7 +3,9 @@
   <!-- see http://www.ros.org/wiki/roslaunch/XML/machine -->
 
   <!-- change this next line to include the launch file for your robot's hardware drivers here -->
-  <node machine="robot" pkg="rosserial_python" type="serial_node.py" args="/dev/ttyACM0" name="serial_node" respawn="true"/>
+  <node machine="robot" pkg="rosserial_python" type="serial_node.py" args="/dev/ttyACM0" name="serial_node" respawn="true">
+      <rosparam param="loop_dly">10</rosparam> 
+  </node>
   <param name="robot_description" textfile="$(find yertle)/yertle.urdf" /> 
 
 <!--  original value 15164 --> 
@@ -20,7 +22,7 @@
       <remap from="wheel_vtarget" to="lwheel_vtarget"/>
       <remap from="wheel_vel" to="lwheel_vel"/>
       <rosparam param="Kp">300</rosparam>
-      <rosparam param="Ki">3000</rosparam>
+      <rosparam param="Ki">3000</rosparam> 
       <rosparam param="Kd">0</rosparam>
       <rosparam param="out_min">-255</rosparam>
       <rosparam param="out_max">255</rosparam>
@@ -62,6 +64,21 @@
   <node machine="robot" name="laptop_bat" pkg="yertle" type="laptop_bat.py" />
   <node machine="robot" name="laptop_wifi" pkg="yertle" type="laptop_wifi.py" >
      <param name="range" value="70" />
+  </node>
+  <node machine="robot" name="range0" pkg="yertle" type="int2range.py" >
+    <param name="frame" value="range0"/>
+    <remap from="range_int" to="range0"/>
+    <remap from="range" to="range_right"/>
+  </node>
+  <node machine="robot" name="range1" pkg="yertle" type="int2range.py" >
+    <param name="frame" value="range1"/>
+    <remap from="range_int" to="range1"/>
+    <remap from="range" to="range_center"/>
+  </node>
+  <node machine="robot" name="range2" pkg="yertle" type="int2range.py" >
+    <param name="frame" value="range2"/>
+    <remap from="range_int" to="range2"/>
+    <remap from="range" to="range_left"/>
   </node>
   
 </launch>

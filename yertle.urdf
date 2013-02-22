@@ -3,7 +3,7 @@
   <link name="base_link">
     <visual>
       <geometry>
-        <cylinder length="0.02" radius="0.18" />
+        <cylinder length="0.01" radius="0.21" />
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0.075"/>
       <material name="white">
@@ -120,6 +120,60 @@
     <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
   
+  <link name="range0">
+    <visual>
+        <geometry>
+            <box size="0.01 0.03 0.005"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+    </visual>
+  </link>
+  
+  <joint name="base_to_range0" type="fixed">
+    <parent link="base_link"/>
+    <child link="range0"/>
+    <origin xyz="0.1414 -0.1414 0.085" rpy="0 0 -0.7854"/>
+  </joint>
+  
+  <link name="range1">
+    <visual>
+        <geometry>
+            <box size="0.01 0.03 0.005"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+    </visual>
+  </link>
+  
+  <joint name="base_to_range1" type="fixed">
+    <parent link="base_link"/>
+    <child link="range1"/>
+    <origin xyz="0.20 0 0.085" rpy="0 0 0"/>
+  </joint>
+ 
+ 
+   <link name="range2">
+    <visual>
+        <geometry>
+            <box size="0.01 0.03 0.005"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+    </visual>
+  </link>
+  
+  <joint name="base_to_range2" type="fixed">
+    <parent link="base_link"/>
+    <child link="range2"/>
+    <origin xyz="0.1414 0.1414 0.085" rpy="0 0 0.7854"/>
+  </joint>
   
   
 </robot>
