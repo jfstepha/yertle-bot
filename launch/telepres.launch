@@ -1,0 +1,16 @@
+<launch>
+    <machine name="robot" address="$(env ROBOT)" env-loader="/home/jfstepha/ros_workspace/env.sh" user="jfstepha" timeout="240"/>
+    <env name="GSCAM_CONFIG" value="v4l2src device=/dev/video0 ! video/x-raw-yuv,framerate=30/1,width=176,height=144 ! videobalance brightness=0.2 contrast=0.5 ! ffmpegcolorspace ! timeoverlay ! videorate max-rate=2"/>
+    <!-- <env name="GSCAM_CONFIG" value="v4l2src device=/dev/video0 ! video/x-raw-yuv,framerate=30/1 ! ffmpegcolorspace ! timeoverlay ! videobalance brightness=0.6 ! videorate ! video/x-raw-yuv,framerate=1/1"/> -->
+    <!--   audio is something like this: <env name="GSCAM_CONFIG" value="v4l2src device=/dev/video0 ! video/x-raw-yuv,framerate=30/1 ! ffmpegcolorspace ! timeoverlay ! videorate ! video/x-raw-yuv,width=320,height=240,framerate=5/1 ! mux. alsasrc device=hw:1,0 ! audio/x-raw-int,rate=48000,channels=2,depth=16"/> -->
+    <group ns="host_cam">
+      	<node name="gscam_robot" pkg="gscam" type="gscam"/>
+	    <node name="image_robot" pkg="image_view" type="image_view">
+		    <remap from="image" to="gscam/image_raw"/>
+	    </node>
+	</group>
+	<group ns="host_cam">
+	   <node name="gscam_host" pkg="gscam" type="gscam"/>
+	</group>
+	
+</launch>

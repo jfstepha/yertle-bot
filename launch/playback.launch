@@ -1,0 +1,21 @@
+<launch>
+  <param name="robot_description" textfile="$(find yertle)/yertle.urdf" /> 
+  <param name="use_sim_time" value="true" />
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" >
+    <param name="publish_frequency" value="5" />
+  </node>
+
+  <node pkg="gmapping" type="slam_gmapping" name="gmapping" output="screen">
+    <param name="delta" value="0.05" />
+    <param name="xmin" value="-5.0" />
+    <param name="xmax" value="5.0" />
+    <param name="ymin" value="-5.0" />
+    <param name="ymax" value="5.0" />
+    <param name="kernelSize" value="0.1" />
+    <param name="linearUpdate" value="0.1" />
+
+  </node>
+  
+</launch>
+

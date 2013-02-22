@@ -1,0 +1,17 @@
+<launch>
+  <!-- Run the map server -->
+
+  <!--- Run AMCL -->
+  <machine name="robot" address="$(env ROBOT)" env-loader="/home/jfstepha/ros_workspace/env.sh" user="jfstepha" timeout="240"/>   
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <remap from="cmd_vel" to="twist" />
+    <rosparam file="$(find yertle)/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find yertle)/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find yertle)/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find yertle)/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find yertle)/base_local_planner_params.yaml" command="load" />
+    <param name="planner_frequency" value="20" />
+    <param name="meter_scoring" value="true" />
+
+  </node>
+</launch>
