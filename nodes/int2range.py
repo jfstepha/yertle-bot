@@ -27,7 +27,9 @@ roslib.load_manifest('yertle')
 from std_msgs.msg import Int16
 from std_msgs.msg import Float32
 from sensor_msgs.msg import Range
+from sensor_msgs.msg import LaserScan
 from numpy import array
+from numpy import linspace
 
 ############################################################################## 
 ############################################################################## 
@@ -69,6 +71,7 @@ class RangeFilter():
         self.filtered_pub = rospy.Publisher("range_filtered", Float32)
         self.std_pub = rospy.Publisher("range_std", Float32)
         self.range_pub = rospy.Publisher("range", Range)
+        self.scan_pub = rospy.Publisher("scan", LaserScan)
         
     #########################################################################
     def readParameters(self):
@@ -78,7 +81,11 @@ class RangeFilter():
         self.max_valid = rospy.get_param("~max_valid", 900)
         self.min_valid = rospy.get_param("~min_valid", 1)
         self.rolling_pts = rospy.get_param('~rolling_pts',20)
+        self.max_range = rospy.get_param('~max_range',0.4)
+        self.min_range = rospy.get_param('~min_range',0.04)
         self.frame = rospy.get_param("~frame", "range0")
+        self.field_of_view = rospy.get_param("~field_of_view", 0.1)
+        self.scan_time = rospy.get_param("~scan_time", 0.1)  # time between laser scans
         
     #########################################################################
     def spin(self):
@@ -106,20 +113,37 @@ class RangeFilter():
             self.filtered_pub.publish( self.rolling_meters )
             self.std_pub.publish( self.rolling_std )
             
-            range = Range()
-            range.radiation_type = 1
-            range.min_range = 0.04
-            range.max_range = 0.3
-            range.range = self.rolling_meters
-            range.header.frame_id = self.frame
-            range.field_of_view = 0.1
-            range.header.stamp = rospy.Time.now()
+            rng = Range()
+            rng.radiation_type = 1
+            rng.min_range = self.min_range
+            rng.max_range = self.max_range
+            rng.range = self.rolling_meters
+            rng.header.frame_id = self.frame
+            rng.field_of_view = 0.1
+            rng.header.stamp = rospy.Time.now()
             
-            self.range_pub.publish( range )
-            
-            
-            
-        
+            self.range_pub.publish( rng )
+           
+            ranges = [] 
+            intensities = []
+            angle_start = 0.0 - self.field_of_view
+            angle_stop = self.field_of_view
+            for angle in linspace( angle_start, angle_stop, 10):
+                ranges.append( self.rolling_meters )
+                intensities.append( 1.0 )
+            scan = LaserScan()
+            scan.ranges = ranges
+            scan.header.frame_id = self.frame
+            scan.time_increment = 0;
+            scan.range_min = self.min_range
+            scan.range_max = self.max_range
+            scan.angle_min = angle_start
+            scan.angle_max = angle_stop
+            scan.angle_increment = (angle_stop - angle_start) / 10
+            scan.intensities = intensities
+            scan.scan_time = self.scan_time
+            scan.header.stamp = rospy.Time.now()
+            self.scan_pub.publish( scan )
     
 ############################################################################## 
 ############################################################################## 
