@@ -11,29 +11,5 @@
     <remap from="image" to="/camera/depth/image_raw"/>
   </node>
 
-  <node machine="robot" pkg="gmapping" type="slam_gmapping" name="gmapping" output="screen">
-    <!--   <remap from="scan" to="/laser"/> -->
-    <param name="odom_frame" value="odom" />
-    <param name="map_update_interval" value="5" />
-    <param name="linearUpdate" value="1.0" />     <!-- Process a scan each time the robot translates this far -->
-    <param name="angularUpdate" value="0.1" /> <!-- Process a scan each time the robot rotates this far -->
-    <param name="kernelSize" value="1" />    <!-- The kernel in which to look for a correspondence -->
-    <param name="lstep" value="0.05" />        <!-- The optimization step in translation -->
-    <param name="astep" value="0.05" />        <!-- The optimization step in rotation -->
-    <param name="iterations" value="5" />      <!-- The number of interations in the scan matcher -->
-    <param name="lsigma" value="0.075" />      <!-- The sigma of a beam used for likelihood -->
-    <param name="delta" value="0.05" />       <!-- resolution of the map -->
-    <param name="xmin" value="-10.0" />
-    <param name="xmax" value="10.0" />
-    <param name="ymin" value="-10.0" />
-    <param name="ymax" value="10.0" />
-    <param name="llsamplerange" value="0.01" />
-    <param name="llsamplestep" value="0.01" />
-    <param name="maxRange" value="4.0" />
-    <param name="maxURange" value="3.98" />
-    <param name="srr" value="0.1" />
-    <param name="srt" value="0.2" />
-    <param name="str" value="0.1" />
-    <param name="stt" value="0.2" />
-  </node>
+
 </launch>

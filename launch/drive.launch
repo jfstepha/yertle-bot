@@ -68,6 +68,7 @@
   <node machine="robot" name="range0" pkg="yertle" type="int2range.py" output="screen" >
     <param name="frame" value="range0"/>
     <param name="rolling_pts" value="1" />
+    <param name="max_range" value="0.25" />
     <remap from="range_int" to="range0"/>
     <remap from="range" to="range_right"/>
     <remap from ="scan" to="scan_right"/>
@@ -75,6 +76,7 @@
   <node machine="robot" name="range1" pkg="yertle" type="int2range.py" >
     <param name="frame" value="range1"/>
     <param name="rolling_pts" value="1" />
+    <param name="max_range" value="0.25" />
     <remap from="range_int" to="range1"/>
     <remap from="range" to="range_center"/>
     <remap from ="scan" to="scan_center"/>
@@ -82,6 +84,7 @@
   <node machine="robot" name="range2" pkg="yertle" type="int2range.py" >
     <param name="frame" value="range2"/>
     <param name="rolling_pts" value="1" />
+    <param name="max_range" value="0.25" />
     <remap from="range_int" to="range2"/>
     <remap from="range" to="range_left"/>
     <remap from ="scan" to="scan_left"/>
