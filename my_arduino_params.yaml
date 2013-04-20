@@ -1,0 +1,46 @@
+# For a direct USB cable connection, the port name is typically
+# /dev/ttyACM# where is # is a number such as 0, 1, 2, etc
+# For a wireless connection like XBee, the port is typically
+# /dev/ttyUSB# where # is a number such as 0, 1, 2, etc.
+
+port: /dev/ttyACM0
+baud: 57600
+timeout: 0.1
+
+rate: 50
+sensorstate_rate: 10
+
+use_base_controller: True
+base_controller_rate: 10
+
+# === Robot drivetrain parameters
+wheel_diameter: 0.061
+wheel_track: 0.39
+encoder_resolution: 3000
+#gear_reduction: 1.0
+#motors_reversed: True
+
+# === PID parameters
+Kp: 5
+Kd: 20
+Ki: 0
+Ko: 50
+accel_limit: 1
+
+# === Sensor definitions.  Examples only - edit for your robot.
+#     Sensor type can be one of the follow (case sensitive!):
+#	  * Ping
+#	  * GP2D12
+#	  * Analog
+#	  * Digital
+#	  * PololuMotorCurrent
+#	  * PhidgetsVoltage
+#	  * PhidgetsCurrent (20 Amp, DC)
+
+
+
+sensors: {
+  #sonar_front_center:   {pin: 5, type: Ping, rate: 10},
+  battery: {pin: A1, type: Analog, rate: 1, direction: input},
+  arduino_led:          {pin: 13, type: Digital, rate: 5, direction: output}
+}
