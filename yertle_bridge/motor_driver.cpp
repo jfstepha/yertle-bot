@@ -115,11 +115,11 @@ void setMotorSpeed(int i, int spd){
 	if (spd < -255) spd = -255;
 	if( i==LEFT ) {
 		if( spd > 0 )        lfwd( spd );
-		else if ( spd < 0 )  lrev( spd );
+		else if ( spd < 0 )  lrev( -spd );
 		else                 lbrake();
 	} else {
 		if ( spd > 0)        rfwd( spd );
-		else if ( spd < 0 )  rrev( spd );
+		else if ( spd < 0 )  rrev( -spd );
 		else                 rbrake();
 	}
 }
