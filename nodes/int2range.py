@@ -30,6 +30,7 @@ from sensor_msgs.msg import Range
 from sensor_msgs.msg import LaserScan
 from numpy import array
 from numpy import linspace
+from ros_arduino_msgs.msg import Analog
 
 ############################################################################## 
 ############################################################################## 
@@ -66,7 +67,7 @@ class RangeFilter():
             
         self.prev = [0] * self.rolling_pts
     
-        rospy.Subscriber("range_int", Int16, self.inputCallback)
+        rospy.Subscriber("range_int", Analog, self.inputCallback)
     
         self.filtered_pub = rospy.Publisher("range_filtered", Float32)
         self.std_pub = rospy.Publisher("range_std", Float32)
@@ -93,12 +94,11 @@ class RangeFilter():
         while not rospy.is_shutdown():
             rospy.spin()
     
-
     #########################################################################
     def inputCallback(self, msg):
     #########################################################################
         # rospy.loginfo("-D- range_filter inputCallback")
-        cur_val = msg.data
+        cur_val = msg.value
     
         if cur_val <= self.max_valid and cur_val >= self.min_valid:
             self.prev.append(cur_val)

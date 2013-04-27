@@ -69,3 +69,14 @@ void updatePID() {
   setMotorSpeeds(leftPID.output, rightPID.output);
 }
 
+void resetPID() {
+  /* when we stop the motors, we should reset the Ierror, so we will start from zero again */
+	leftPID.Ierror = 0;
+	leftPID.PrevErr = 0;
+	leftPID.output = 0;
+	rightPID.Ierror = 0;
+	rightPID.PrevErr = 0;
+	rightPID.output = 0;
+
+}
+

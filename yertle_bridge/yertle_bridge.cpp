@@ -207,6 +207,7 @@ int runCommand() {
     if (arg1 == 0 && arg2 == 0) {
       setMotorSpeeds(0, 0);
       moving = 0;
+      resetPID();
     }
     else moving = 1;
     leftPID.TargetTicksPerFrame = arg1;
@@ -305,6 +306,7 @@ void loop() {
   if ((millis() - lastMotorCommand) > AUTO_STOP_INTERVAL) {;
     setMotorSpeeds(0, 0);
     moving = 0;
+    resetPID();
   }
 
 #endif

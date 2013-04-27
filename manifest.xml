@@ -9,8 +9,9 @@
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/yertle</url>
   <depend package="differential_drive"/>
-  <depend package="rosserial_arduino"/>
+  <!-- <depend package="rosserial_arduino"/> -->
   <depend package="openni_launch"/>
+  <depend package="ros_arduino_msgs"/>
    <export>
     <rqt_gui plugin="${prefix}/plugin_yertle_dash.xml"/>
   </export> 

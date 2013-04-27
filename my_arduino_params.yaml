@@ -42,5 +42,8 @@ accel_limit: 1
 sensors: {
   #sonar_front_center:   {pin: 5, type: Ping, rate: 10},
   battery: {pin: 1, type: Analog, rate: 1, direction: input},
+  range0: {pin: 2, type: Analog, rate: 10, direction: input},
+  range1: {pin: 3, type: Analog, rate: 10, direction: input},
+  range2: {pin: 4, type: Analog, rate: 10, direction: input},
   arduino_led:          {pin: 13, type: Digital, rate: 5, direction: output}
 }

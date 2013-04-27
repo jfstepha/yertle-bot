@@ -25,8 +25,8 @@ class MainVirtJoy(QWidget):
         self.timer_rate = rospy.get_param('~publish_rate', 150)
         self.pub_twist = rospy.Publisher('twist', Twist)
         
-        self.x_min = rospy.get_param("~x_min", -0.20)
-        self.x_max = rospy.get_param("~x_max", 0.20)
+        self.x_min = rospy.get_param("~x_min", -0.10)
+        self.x_max = rospy.get_param("~x_max", 0.10)
         self.r_min = rospy.get_param("~r_min", -1.0)
         self.r_max = rospy.get_param("~r_max", 1.0)
         
