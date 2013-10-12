@@ -1,6 +1,6 @@
 <launch>
   <!-- Run the map server -->
-  <node name="map_server" pkg="map_server" type="map_server" args="/home/jfstepha/ros_workspace/maps/map_whole_house_13_02_17_fixed.yaml" />
+  <node name="map_server" pkg="map_server" type="map_server" args="/home/jfstepha/catkin_ws/maps/map_whole_house_13_02_17_fixed.yaml" />
 
   <!--- Run AMCL -->
   <include file="$(find yertle)/launch/amcl_diff.launch" />

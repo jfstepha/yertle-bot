@@ -1,0 +1,9 @@
+.project
+.pydevproject
+CMakeCache.txt
+CMakeFiles
+rqt_rviz_ogre.log
+*.pyc
+src/yertle/*.pyc
+src/yertle/__init__.pyc
+src/yertle/yertle_dash.pyc
