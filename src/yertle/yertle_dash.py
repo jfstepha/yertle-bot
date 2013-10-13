@@ -6,6 +6,7 @@ import os
 import rospy
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Int16
+from std_msgs.msg import Int32
 from std_msgs.msg import Float32
 from std_msgs.msg import String
 from ros_arduino_msgs.msg import Analog
@@ -117,7 +118,7 @@ class MyPlugin(Plugin):
         rospy.Subscriber("laptop_wifi", Int16, self.lapWifiCallback)
         
         
-        rospy.Subscriber("arduino_debug", String, self.arduinoDebugCallback)
+        rospy.Subscriber("arduino/ticks", Int32, self.arduinoDebugCallback)
         
         
     #####################################################################    
@@ -125,9 +126,9 @@ class MyPlugin(Plugin):
     #####################################################################    
         self.ticks_since_debug += 1
         if self.ticks_since_debug > 150:
-            self.ui.tbDebug.setStyleSheet("QLineEdit { background-color: Red; } ")
+             self.ui.tbDebug.setStyleSheet("QLineEdit { background-color: Red; } ")
         else: 
-            self.ui.tbDebug.setStyleSheet("QLineEdit { background-color: LightGreen; } ")
+             self.ui.tbDebug.setStyleSheet("QLineEdit { background-color: LightGreen; } ")
        
         self.ticks_since_ltarg += 1     
         if self.ticks_since_ltarg > 10:
@@ -210,7 +211,7 @@ class MyPlugin(Plugin):
     #############################################################################
     def arduinoDebugCallback(self, msg):
     #############################################################################
-        self.c.debugmsg.emit( msg.data )
+        self.c.debugmsg.emit( "Tick %s" % str(msg.data) )
         self.ticks_since_debug = 0
         
         
