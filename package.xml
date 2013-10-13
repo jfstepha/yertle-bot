@@ -1,0 +1,27 @@
+<package>
+  <name>yertle</name>
+  <version>1.0.0</version>
+  <description>
+
+     yertle
+
+  </description>
+  <author>Jon Stephan</author>
+  <maintainer email="jfstepha@gmail.com">Jon Stephan</maintainer>
+  <license>BSD</license>
+  <url>http://ros.org/wiki/yertle</url>
+  <buildtool_depend>catkin</buildtool_depend>
+  <run_depend>differential_drive</run_depend>
+  <run_depend>openni_launch</run_depend>
+  <run_depend>ros_arduino_messages</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>ros_arduino_messages</run_depend>
+   <export>
+    <rqt_gui plugin="${prefix}/plugin_yertle_dash.xml"/>
+    <rqt_gui plugin="${prefix}/plugin_virtual_joystick.xml"/>
+  </export> 
+
+</package>
+
+
