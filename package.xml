@@ -16,6 +16,7 @@
   <run_depend>ros_arduino_messages</run_depend>
   <run_depend>rospy</run_depend>
   <run_depend>std_msgs</run_depend>
+  <run_depend>ros_arduino_messages</run_depend>
    <export>
     <rqt_gui plugin="${prefix}/plugin_yertle_dash.xml"/>
     <rqt_gui plugin="${prefix}/plugin_virtual_joystick.xml"/>
