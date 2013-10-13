@@ -8,6 +8,7 @@ from geometry_msgs.msg import Twist
 from std_msgs.msg import Int16
 from std_msgs.msg import Float32
 from std_msgs.msg import String
+from ros_arduino_msgs.msg import Analog
 
 from qt_gui.plugin import Plugin
 from python_qt_binding import loadUi
@@ -107,7 +108,7 @@ class MyPlugin(Plugin):
         rospy.Subscriber("rwheel_vel", Float32, self.rwheelVelCallback)
         rospy.Subscriber("rmotor_cmd", Float32, self.rmotorCallback)
 
-        rospy.Subscriber("battery", Int16, self.batCallback)
+        rospy.Subscriber("/arduino/sensor/battery", Analog, self.batCallback)
         # 720 is pretty dead, but when motors run, it droops to <400
         self.ui.pb12V.setMaximum(770)  # 750 = ~12.8V
         self.ui.pb12V.setMinimum(600)
@@ -192,7 +193,9 @@ class MyPlugin(Plugin):
     #############################################################################
     def batCallback(self, msg):
     #############################################################################
-        self.c.bat12v.emit( int( msg.data  ) )    
+        a= msg.value
+        print "A=%s" % str(a)
+        self.c.bat12v.emit( int( msg.value  ) )    
         
     #############################################################################
     def lapBatCallback(self, msg):

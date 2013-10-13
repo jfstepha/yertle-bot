@@ -114,6 +114,7 @@
   long lastMotorCommand = AUTO_STOP_INTERVAL;
 #endif
 
+
 /* Variable initialization */
 
 // A pair of varibles to help parse serial commands (thanks Fergs)
@@ -133,6 +134,10 @@ char argv2[16];
 // The arguments converted to integers
 long arg1;
 long arg2;
+
+#define TICK_INTERVAL 1000
+unsigned long ticks;
+unsigned long nextTick = TICK_INTERVAL;
 
 /* Clear the current command parameters */
 void resetCommand() {
@@ -155,6 +160,9 @@ int runCommand() {
   arg2 = atoi(argv2);
 
   switch(cmd) {
+  case GET_TICKS:
+	Serial.println(ticks);
+	break;
   case GET_BAUDRATE:
     Serial.println(BAUDRATE);
     break;
@@ -235,6 +243,7 @@ int runCommand() {
 /* Setup function--runs once at startup. */
 void setup() {
   Serial.begin(BAUDRATE);
+  ticks=0;
 
 // Initialize the motor controller if used */
 #ifdef USE_BASE
@@ -310,4 +319,8 @@ void loop() {
   }
 
 #endif
+  if (millis() > nextTick) {
+	 ticks += 1;
+	 nextTick += TICK_INTERVAL;
+  }
 }
