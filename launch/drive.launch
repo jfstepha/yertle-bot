@@ -1,5 +1,5 @@
 <launch>
-  <machine name="robot" address="$(env ROBOT)" env-loader="/home/jfstepha/catkin_ws/env.sh" user="jfstepha" timeout="240"/>
+  <machine name="robot" address="$(env ROBOT)" env-loader="$(env ENV_LOADER)" user="jfstepha" timeout="240"/>
   <!-- see http://www.ros.org/wiki/roslaunch/XML/machine -->
 
   <!-- change this next line to include the launch file for your robot's hardware drivers here -->
