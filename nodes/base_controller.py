@@ -87,6 +87,8 @@ class BaseController:
         
         # Set up the odometry broadcaster
         self.odomPub = rospy.Publisher('odom', Odometry)
+        self.lwheel = rospy.Publisher('lwheel', Int16)
+        self.rwheel = rospy.Publisher('rwheel', Int16)
         self.odomBroadcaster = TransformBroadcaster()
         
         rospy.loginfo("Started base controller for a base of " + str(self.wheel_track) + "m wide with " + str(self.encoder_resolution) + " ticks per rev")
@@ -126,6 +128,8 @@ class BaseController:
                 rospy.logerr("Encoder exception count: " + str(self.bad_encoder_count))
                 return
                             
+            self.lwheel.publish(lwheel)
+            self.rwheel.publish(rwheel)
             dt = now - self.then
             self.then = now
             dt = dt.to_sec()

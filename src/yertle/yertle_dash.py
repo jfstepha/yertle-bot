@@ -109,7 +109,7 @@ class MyPlugin(Plugin):
         rospy.Subscriber("rwheel_vel", Float32, self.rwheelVelCallback)
         rospy.Subscriber("rmotor_cmd", Float32, self.rmotorCallback)
 
-        rospy.Subscriber("/arduino/sensor/battery", Analog, self.batCallback)
+        rospy.Subscriber("/Arduino/sensor/battery", Analog, self.batCallback)
         # 720 is pretty dead, but when motors run, it droops to <400
         self.ui.pb12V.setMaximum(770)  # 750 = ~12.8V
         self.ui.pb12V.setMinimum(600)
@@ -118,7 +118,7 @@ class MyPlugin(Plugin):
         rospy.Subscriber("laptop_wifi", Int16, self.lapWifiCallback)
         
         
-        rospy.Subscriber("arduino/ticks", Int32, self.arduinoDebugCallback)
+        rospy.Subscriber("Arduino/ticks", Int32, self.arduinoDebugCallback)
         
         
     #####################################################################    
