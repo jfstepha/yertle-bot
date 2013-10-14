@@ -12,6 +12,9 @@ install(PROGRAMS
   scripts/joy_teleop.py
   scripts/laptop_bat.py
   scripts/laptop_wifi.py
+  nodes/arduino_driver.py  
+  nodes/arduino_node.py  
+  nodes/arduino_sensors.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
