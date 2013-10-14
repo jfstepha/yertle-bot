@@ -248,6 +248,7 @@ void setup() {
 // Initialize the motor controller if used */
 #ifdef USE_BASE
   initMotorController();
+  initEncoders();
 #endif
 
 /* Attach servos if used */
