@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.4.6)
 project(yertle)
 
 catkin_package(
-    CATKIN_DEPENDS rospy std_msgs differential_drive openni_launch ros_arduino_messages
+    CATKIN_DEPENDS rospy std_msgs differential_drive openni_launch ros_arduino_bridge
 )
 
 catkin_python_setup()
@@ -12,9 +12,6 @@ install(PROGRAMS
   scripts/joy_teleop.py
   scripts/laptop_bat.py
   scripts/laptop_wifi.py
-  nodes/arduino_driver.py  
-  nodes/arduino_node.py  
-  nodes/arduino_sensors.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

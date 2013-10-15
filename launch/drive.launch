@@ -38,7 +38,7 @@
     <remap from="range" to="range_left"/>
     <remap from ="scan" to="scan_left"/>
   </node>
-  <node machine="robot" name="Arduino" pkg="yertle" type="arduino_node.py" >
+  <node machine="robot" name="Arduino" pkg="ros_arduino_python" type="arduino_node.py" >
 <!--  <node machine="robot" name="Arduino" pkg="yertle" type="arduino_node.py"  output="screen" > -->
       <rosparam file="$(find yertle)/my_arduino_params.yaml" command="load" />
       <remap from="cmd_vel" to="twist"/>
