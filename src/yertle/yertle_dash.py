@@ -108,6 +108,14 @@ class MyPlugin(Plugin):
         rospy.Subscriber("rwheel_vtarget", Float32, self.rwheelVtargetCallback)
         rospy.Subscriber("rwheel_vel", Float32, self.rwheelVelCallback)
         rospy.Subscriber("rmotor_cmd", Float32, self.rmotorCallback)
+        self.ui.pbLVel.setMinimum(0)
+        self.ui.pbRVel.setMinimum(0)
+        self.ui.pbLVel.setMaximum(400)
+        self.ui.pbRVel.setMaximum(400)
+        self.ui.pbRTarget.setMinimum(0)
+        self.ui.pbLTarget.setMinimum(0)
+        self.ui.pbRTarget.setMaximum(400)
+        self.ui.pbLTarget.setMaximum(400)
 
         rospy.Subscriber("/Arduino/sensor/battery", Analog, self.batCallback)
         # 720 is pretty dead, but when motors run, it droops to <400
@@ -161,25 +169,25 @@ class MyPlugin(Plugin):
     def lwheelVtargetCallback(self, msg):
     #############################################################################
         self.ticks_since_ltarg = 0
-        self.c.ltarget.emit( int( msg.data * 1000 ) ) 
+        self.c.ltarget.emit( int( msg.data * 1000 ) + 200 ) 
         
     #############################################################################
     def rwheelVtargetCallback(self, msg):
     #############################################################################
         self.ticks_since_rtarg = 0
-        self.c.rtarget.emit( int( msg.data * 1000 ) )    
+        self.c.rtarget.emit( int( msg.data * 1000 ) + 200 )    
         
     #############################################################################
     def rwheelVelCallback(self, msg):
     #############################################################################
         self.ticks_since_rvel = 0
-        self.c.rvel.emit( int( msg.data * 1000 ) )    
+        self.c.rvel.emit( int( msg.data * 1000 ) + 200)    
         
     #############################################################################
     def lwheelVelCallback(self, msg):
     #############################################################################
         self.ticks_since_lvel = 0
-        self.c.lvel.emit( int( msg.data * 1000 ) )    
+        self.c.lvel.emit( int( msg.data * 1000 ) + 200)    
         
     #############################################################################
     def lmotorCallback(self, msg):
