@@ -116,6 +116,10 @@ class MyPlugin(Plugin):
         self.ui.pbLTarget.setMinimum(0)
         self.ui.pbRTarget.setMaximum(400)
         self.ui.pbLTarget.setMaximum(400)
+        self.ui.pbLMotor.setMinimum(0)
+        self.ui.pbRMotor.setMinimum(0)
+        self.ui.pbLMotor.setMaximum(512)
+        self.ui.pbRMotor.setMaximum(512)
 
         rospy.Subscriber("/Arduino/sensor/battery", Analog, self.batCallback)
         # 720 is pretty dead, but when motors run, it droops to <400
@@ -192,12 +196,12 @@ class MyPlugin(Plugin):
     #############################################################################
     def lmotorCallback(self, msg):
     #############################################################################
-        self.c.lmotor.emit( int( msg.data  ) )    
+        self.c.lmotor.emit( int( msg.data  ) + 255 )    
         
     #############################################################################
     def rmotorCallback(self, msg):
     #############################################################################
-        self.c.rmotor.emit( int( msg.data  ) )    
+        self.c.rmotor.emit( int( msg.data  ) + 255 )    
         
     #############################################################################
     def batCallback(self, msg):
