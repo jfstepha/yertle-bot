@@ -99,12 +99,12 @@ class MyPlugin(Plugin):
         self.ticks_since_lvel = 1000
         self.ticks_since_rvel = 1000
         
-        rospy.Subscriber("lwheel", Int16, self.lwheelCallback)
+        rospy.Subscriber("lwheel", Int32, self.lwheelCallback)
         rospy.Subscriber("lwheel_vtarget", Float32, self.lwheelVtargetCallback)
         rospy.Subscriber("lwheel_vel", Float32, self.lwheelVelCallback)
         rospy.Subscriber("lmotor_cmd", Float32, self.lmotorCallback)
         
-        rospy.Subscriber("rwheel", Int16, self.rwheelCallback)
+        rospy.Subscriber("rwheel", Int32, self.rwheelCallback)
         rospy.Subscriber("rwheel_vtarget", Float32, self.rwheelVtargetCallback)
         rospy.Subscriber("rwheel_vel", Float32, self.rwheelVelCallback)
         rospy.Subscriber("rmotor_cmd", Float32, self.rmotorCallback)

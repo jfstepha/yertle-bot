@@ -6,3 +6,10 @@ CMakeFiles
 src/yertle/yertle_dash.pyc
 rqt_rviz_ogre.log
 src/yertle/virtual_joystick.pyc
+src/yertle/yertle_dash.pyc
+yertle_bridge/.cproject
+yertle_bridge/.gitignore
+yertle_bridge/.settings
+src/yertle/*.pyc
+nodes/*.pyc
+*.pyc
